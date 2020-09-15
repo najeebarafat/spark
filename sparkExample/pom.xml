@@ -1,0 +1,129 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.myCompany.scala</groupId>
+  <artifactId>sparkExample</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <inceptionYear>2008</inceptionYear>
+  <properties>
+    <scala.version>2.12.6</scala.version>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-library</artifactId>
+      <version>${scala.version}</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-common -->
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-common</artifactId>
+      <version>2.7.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.4</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.specs</groupId>
+      <artifactId>specs</artifactId>
+      <version>1.2.5</version>
+      <scope>test</scope>
+    </dependency>
+    <!--<dependency>
+      <groupId>org.scala-tools</groupId>
+      <artifactId>maven-scala-plugin</artifactId>
+      <version>2.11</version>
+    </dependency>-->
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-core_2.12</artifactId>
+      <version>2.4.3</version>
+      <scope>provided</scope>
+
+
+    </dependency>
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-sql_2.12</artifactId>
+      <version>2.4.3</version>
+      <scope>provided</scope>
+
+
+    </dependency>
+  </dependencies>
+  <build>
+    <sourceDirectory>src/main/scala</sourceDirectory>
+    <testSourceDirectory>src/test/scala</testSourceDirectory>
+    <plugins>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.1</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <finalName>packages-omniture-qubole-mapreduce</finalName>
+              <shadedArtifactAttached>false</shadedArtifactAttached>
+              <artifactSet>
+                <includes>
+                  <include>*:*</include>
+                </includes>
+              </artifactSet>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>reference.conf</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+                  <resource>log4j.properties</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+
+                  <mainClass> Test.Example</mainClass>
+
+                </transformer>
+              </transformers>
+              <relocations>
+                <relocation>
+                  <pattern>org.eclipse.jetty</pattern>
+                  <shadedPattern>org.spark-project.jetty</shadedPattern>
+                  <includes>
+                    <include>org.eclipse.jetty.**</include>
+                  </includes>
+                </relocation>
+                <relocation>
+                  <pattern>com.google.common</pattern>
+                  <shadedPattern>org.spark-project.guava</shadedPattern>
+                  <excludes>
+                    <exclude>com/google/common/base/Absent*</exclude>
+                    <exclude>com/google/common/base/Function</exclude>
+                    <exclude>com/google/common/base/Optional*</exclude>
+                    <exclude>com/google/common/base/Present*</exclude>
+                    <exclude>com/google/common/base/Supplier</exclude>
+                  </excludes>
+                </relocation>
+              </relocations>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
