@@ -8,12 +8,11 @@ object OraclHiveSparkMain {
 //$ spark-shell --jars /oraclejdbc.jar
   def main(args: Array[String]): Unit = {
 
-    val inputTable=args(0)// table name
-    val userName=args(1)
-    val connectionString=args(2) // connection string url
-    val jckesFile=args(3)
-    val passwordAlias=args(4)
-    val outputTable=args(5)//output table name with db name ex:- db.tablename_1
+    val userName=args(0)
+    val connectionString=args(1) // connection string url
+    val jckesFile=args(2)
+    val passwordAlias=args(3)
+    val outputTable=args(4)//output table name with db name ex:- db.tablename_1
 
     //Spark session object
     val spark=SparkSession.builder().appName("Import").enableHiveSupport().getOrCreate()
