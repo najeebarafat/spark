@@ -1,8 +1,8 @@
-package Test
+package com.bofa.main
 
-import org.apache.spark.sql.SparkSession
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.security.alias.CredentialProviderFactory
+import org.apache.spark.sql.SparkSession
 
 object OraclHiveSparkMain {
 //$ spark-shell --jars /oraclejdbc.jar
