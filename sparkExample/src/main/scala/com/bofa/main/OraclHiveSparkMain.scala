@@ -32,9 +32,9 @@ object OraclHiveSparkMain {
 
 for(tableDetail <- tableArr){
 
-  val tableName=tableDetail._1
-  val dataBaseName=tableDetail._2
-  val query =tableDetail._3
+  val tableName=tableDetail._1 //tb1
+  val dataBaseName=tableDetail._2 //db1
+  val query =tableDetail._3  // eg: select * from db1.tb1 where logic
   //Read data from database
   val oracleDf = spark.sqlContext.read.format("jdbc").
     option("url", connectionString).
@@ -43,11 +43,11 @@ for(tableDetail <- tableArr){
     option("password",password).
     option("driver", "oracle.jdbc.driver.OracleDriver").load
 
-  //Created view
+  //Creating temp view in-memory
 oracleDf.createOrReplaceGlobalTempView(dataBaseName+"."+tableName)
 
-  //Based on table logic pass query and get result
-  val resDf=oracleDf.sqlContext.sql(query);
+  //Based on table logic pass query and get result  eg: select * from db1.tb1 where logic
+  val resDf=spark.sql(query);
 
   // write data to hive
   resDf.write.mode("overwrite").saveAsTable(dataBaseName+"."+tableName+"_"+outputTable)
