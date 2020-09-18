@@ -38,19 +38,14 @@ for(tableDetail <- tableArr){
   //Read data from database
   val oracleDf = spark.sqlContext.read.format("jdbc").
     option("url", connectionString).
-    option("dbtable", tableName).
+    option("dbtable", query).
     option("user",userName).
     option("password",password).
     option("driver", "oracle.jdbc.driver.OracleDriver").load
 
-  //Creating temp view in-memory
-oracleDf.createOrReplaceGlobalTempView(dataBaseName+"."+tableName)
-
-  //Based on table logic pass query and get result  eg: select * from db1.tb1 where logic
-  val resDf=spark.sql(query);
 
   // write data to hive
-  resDf.write.mode("overwrite").saveAsTable(dataBaseName+"."+tableName+"_"+outputTable)
+  oracleDf.write.mode("overwrite").saveAsTable(dataBaseName+"."+tableName+"_"+outputTable)
 }
 
 
